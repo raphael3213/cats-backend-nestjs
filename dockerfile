@@ -17,7 +17,12 @@ COPY . .
 EXPOSE 3000
 
 # Set environment variables for SQLite database file path
-ENV SQLITE_DB_PATH=/usr/src/app/sqlite.db
+
+VOLUME /usr/src/app/data/db
+
+VOLUME /usr/src/app/data/cats
+
+ENV SQLITE_DB_PATH=/usr/src/app/data/db/sqlite.db
 
 # (Optional) Create SQLite database file
 RUN touch $SQLITE_DB_PATH

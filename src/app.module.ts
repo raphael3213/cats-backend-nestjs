@@ -4,16 +4,19 @@ import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cat } from './cats/entities/cat.entity';
+import { UploadsModule } from './uploads/uploads.module';
 
 @Module({
   imports: [
     CatsModule,
     TypeOrmModule.forRoot({
       type: 'sqlite',
-      database: 'db.sqlite',
+      database: 'data/db/db.sqlite',
       entities: [Cat],
       synchronize: true,
+      autoLoadEntities: true,
     }),
+    UploadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
