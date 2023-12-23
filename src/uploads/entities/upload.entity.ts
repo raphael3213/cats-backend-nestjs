@@ -19,7 +19,7 @@ export class Upload {
   fileName: string;
 
   //TODO: Need to add enum values for fileType
-  @Column({ type: 'text', name: 'file_type', nullable: false, unique: true })
+  @Column({ type: 'text', name: 'file_type', nullable: false })
   fileType: string;
 
   @Column({ type: 'bigint', name: 'created_at' })

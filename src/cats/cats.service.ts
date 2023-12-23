@@ -26,7 +26,7 @@ export class CatsService {
       relations: ['upload'],
     });
     if (!cat) {
-      throw new NotFoundException();
+      throw new NotFoundException('Cat not found');
     }
     let uploadedPhoto: Upload;
 

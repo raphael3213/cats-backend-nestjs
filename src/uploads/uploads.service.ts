@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { unlink, writeFile } from 'fs/promises';
+import { unlink, writeFile, readFile } from 'fs/promises';
 import { Repository } from 'typeorm';
 import { Upload } from './entities/upload.entity';
 import ksuid from 'ksuid';
+import { createReadStream } from 'fs';
 
 @Injectable()
 export class UploadsService {
@@ -19,7 +20,8 @@ export class UploadsService {
     await writeFile(fileName, Buffer.from(file.buffer));
 
     const upload = this.uploadRepository.create({
-      ksuid: fileName,
+      ksuid: generatedKsuid,
+      fileName,
       fileType,
     });
 
@@ -34,16 +36,26 @@ export class UploadsService {
     const generatedKsuid = ksuid.randomSync().toJSON();
     const fileName = `data/uploads/${generatedKsuid}.${fileType}`;
     await writeFile(fileName, Buffer.from(file.buffer));
-
-    return this.uploadRepository.save({
-      ...upload,
-      updatedAt: Math.floor(Date.now() / 1000),
+    const newUpload = this.uploadRepository.create({
+      ksuid: generatedKsuid,
+      fileName,
+      fileType,
     });
+    return this.uploadRepository.save(newUpload);
   }
 
   async delete(upload: Upload) {
     await unlink(upload.fileName);
     this.uploadRepository.softDelete(upload.id);
   }
+
+  async getImage(ksuid: string) {
+    const upload = await this.uploadRepository.findOne({ where: { ksuid } });
+    if (!upload) {
+      throw new NotFoundException('Upload not found');
+    }
+    const imageStream = await readFile(upload.fileName);
+
+    return imageStream;
+  }
 }
-// 1703274785

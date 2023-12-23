@@ -16,8 +16,11 @@ import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateCatDto } from './dto/update-cat.dto';
+import { Serialize } from 'src/interceptors/serialize.interceptors';
+import { CatDto } from './dto/cat.dto';
 
 @Controller('cats')
+@Serialize(CatDto)
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 
