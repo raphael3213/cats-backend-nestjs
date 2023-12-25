@@ -7,6 +7,8 @@ import { Cat } from './cats/entities/cat.entity';
 import { UploadsModule } from './uploads/uploads.module';
 import { UtilityModule } from './utility/utility.module';
 import { UsersModule } from './users/users.module';
+import { Upload } from './uploads/entities/upload.entity';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { UsersModule } from './users/users.module';
     TypeOrmModule.forRoot({
       type: 'sqlite',
       database: 'data/db/db.sqlite',
-      entities: [Cat],
+      entities: [Cat, Upload, User],
       synchronize: true,
       autoLoadEntities: true,
     }),
