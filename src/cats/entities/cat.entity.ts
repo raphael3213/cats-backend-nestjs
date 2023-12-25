@@ -1,13 +1,13 @@
 import ksuid from 'ksuid';
 import { Upload } from 'src/uploads/entities/upload.entity';
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -25,21 +25,9 @@ export class Cat {
   @JoinColumn()
   upload: Upload;
 
-  @Column({ type: 'bigint', name: 'created_at' })
-  createdAt: number;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @Column({ type: 'bigint', name: 'updated_at' })
-  updatedAt: number;
-
-  @BeforeInsert()
-  updateTimestampsOnInsert() {
-    const currentTime = Math.floor(Date.now() / 1000);
-    this.createdAt = currentTime;
-    this.updatedAt = currentTime;
-  }
-
-  @BeforeUpdate()
-  updateTimestampsOnUpdate() {
-    this.updatedAt = Math.floor(Date.now() / 1000);
-  }
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 }

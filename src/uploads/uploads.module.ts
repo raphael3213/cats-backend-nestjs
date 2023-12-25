@@ -4,7 +4,7 @@ import { Upload } from './entities/upload.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UploadsController } from './uploads.controller';
 import { UtilityModule } from 'src/utility/utility.module';
-import { StorageService } from 'src/utility/storage.service';
+import { StorageService } from '../utility/storage/storage.service';
 
 @Module({
   controllers: [UploadsController],
