@@ -5,6 +5,7 @@ import { CatsModule } from './cats/cats.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cat } from './cats/entities/cat.entity';
 import { UploadsModule } from './uploads/uploads.module';
+import { UtilityModule } from './utility/utility.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UploadsModule } from './uploads/uploads.module';
       autoLoadEntities: true,
     }),
     UploadsModule,
+    UtilityModule,
   ],
   controllers: [AppController],
   providers: [AppService],

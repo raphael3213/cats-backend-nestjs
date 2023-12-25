@@ -1,10 +1,10 @@
 import {
-  BeforeInsert,
-  BeforeUpdate,
   Column,
+  CreateDateColumn,
   DeleteDateColumn,
   Entity,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -22,23 +22,28 @@ export class Upload {
   @Column({ type: 'text', name: 'file_type', nullable: false })
   fileType: string;
 
-  @Column({ type: 'bigint', name: 'created_at' })
-  createdAt: number;
+  @CreateDateColumn({ name: 'created_at' })
+  createdAt: Date;
 
-  @Column({ type: 'bigint', name: 'updated_at' })
-  updatedAt: number;
+  @UpdateDateColumn({ name: 'updated_at' })
+  updatedAt: Date;
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
 
-  @BeforeInsert()
-  updateTimestampsOnInsert() {
-    const currentTime = Math.floor(Date.now() / 1000);
-    this.createdAt = currentTime;
-    this.updatedAt = currentTime;
-  }
-  @BeforeUpdate()
-  updateTimestampsOnUpdate() {
-    this.updatedAt = Math.floor(Date.now() / 1000);
-  }
+  // @BeforeInsert()
+  // updateTimestampsOnInsert() {
+  //   const currentTime = Math.floor(Date.now() / 1000);
+  //   this.createdAt = currentTime;
+  //   this.updatedAt = currentTime;
+  // }
+  // @BeforeUpdate()
+  // updateTimestampsOnUpdate() {
+  //   this.updatedAt = Math.floor(Date.now() / 1000);
+  // }
+
+  // @BeforeRemove()
+  // updateTimestampsonDelete() {
+  //   this.deletedAt = Math.floor(Date.now() / 1000);
+  // }
 }

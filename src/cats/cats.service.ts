@@ -5,7 +5,6 @@ import { Cat } from './entities/cat.entity';
 import { Repository } from 'typeorm';
 import { UploadsService } from 'src/uploads/uploads.service';
 import { UpdateCatDto } from './dto/update-cat.dto';
-import { Upload } from 'src/uploads/entities/upload.entity';
 
 @Injectable()
 export class CatsService {
@@ -28,14 +27,12 @@ export class CatsService {
     if (!cat) {
       throw new NotFoundException('Cat not found');
     }
-    let uploadedPhoto: Upload;
 
     if (cat.upload) {
-      uploadedPhoto = await this.uploadsService.update(cat.upload, file);
-    } else {
-      uploadedPhoto = await this.uploadsService.create(file);
+      await this.uploadsService.delete(cat.upload);
     }
 
+    const uploadedPhoto = await this.uploadsService.create(file);
     cat.upload = uploadedPhoto;
     return this.catRepository.save(cat);
   }
