@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cat } from './cats/entities/cat.entity';
 import { UploadsModule } from './uploads/uploads.module';
 import { UtilityModule } from './utility/utility.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UtilityModule } from './utility/utility.module';
     }),
     UploadsModule,
     UtilityModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
