@@ -105,7 +105,6 @@ describe('CatsService', () => {
     const uploadedCat = await service.uploadPhoto(cat.ksuid, mockFile);
     expect(uploadedCat).toBeDefined();
     expect(uploadedCat.upload).toBeDefined();
-    console.log(cat);
     resetStorage();
   });
   it('should delete the upload record and remove it from the cat record on deletePhoto', async () => {
