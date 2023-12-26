@@ -23,6 +23,14 @@ services:
       - db
     volumes:
       - ./src:/app/src
+      - image_data:/app/data/uploads
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: cat_db
+      DB_USERNAME: admin
+      DB_PASSWORD: password
 
 volumes:
   pgdata:
+  image_data:

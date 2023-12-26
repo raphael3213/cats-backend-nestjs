@@ -7,25 +7,34 @@ import { UploadsModule } from './uploads/uploads.module';
 import { UtilityModule } from './utility/utility.module';
 import { UsersModule } from './users/users.module';
 import { TestModule } from './test/test.module';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
     CatsModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'db',
-      port: 5432,
-      username: 'admin',
-      password: 'password',
-      database: 'cat_db',
-      entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true,
-      autoLoadEntities: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: async (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get<string>('DB_HOST', 'localhost'),
+        port: configService.get<number>('DB_PORT', 5432),
+        username: configService.get<string>('DB_USERNAME', 'postgres'),
+        password: configService.get<string>('DB_PASSWORD', 'password'),
+        database: configService.get<string>('DB_DATABASE', 'postgres'),
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        autoLoadEntities: true,
+        synchronize: true,
+      }),
     }),
     UploadsModule,
     UtilityModule,
     UsersModule,
     TestModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      ignoreEnvFile: true,
+    }),
   ],
   controllers: [AppController],
   providers: [AppService],
