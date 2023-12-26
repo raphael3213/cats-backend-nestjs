@@ -33,7 +33,7 @@ export class CatsController {
     return this.catsService.create(createCatDto);
   }
 
-  @Patch('upload/:ksuid')
+  @Patch(':ksuid/upload-image')
   @UseInterceptors(FileInterceptor('image'))
   async uploadPhoto(
     @Param('ksuid') ksuid: string,
