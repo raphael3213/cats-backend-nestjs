@@ -12,7 +12,13 @@
       "runtimeVersion": "18.17.1",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start:dev"],
-      "env": {},
+      "env": {
+        "DB_HOST": "0.0.0.0",
+        "DB_PORT": "5432",
+        "DB_DATABASE": "postgres",
+        "DB_USERNAME": "postgres",
+        "DB_PASSWORD": "password"
+      },
       "outputCapture": "std"
     }
   ]

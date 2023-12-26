@@ -1,8 +1,10 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Param, Res, UseGuards } from '@nestjs/common';
 import { UploadsService } from './uploads.service';
 import { Response } from 'express';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('uploads')
+@UseGuards(AuthGuard)
 export class UploadsController {
   constructor(private readonly uploadsService: UploadsService) {}
 

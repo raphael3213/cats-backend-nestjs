@@ -30,20 +30,4 @@ export class Upload {
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deletedAt: Date;
-
-  // @BeforeInsert()
-  // updateTimestampsOnInsert() {
-  //   const currentTime = Math.floor(Date.now() / 1000);
-  //   this.createdAt = currentTime;
-  //   this.updatedAt = currentTime;
-  // }
-  // @BeforeUpdate()
-  // updateTimestampsOnUpdate() {
-  //   this.updatedAt = Math.floor(Date.now() / 1000);
-  // }
-
-  // @BeforeRemove()
-  // updateTimestampsonDelete() {
-  //   this.deletedAt = Math.floor(Date.now() / 1000);
-  // }
 }

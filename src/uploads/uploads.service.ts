@@ -30,23 +30,16 @@ export class UploadsService {
     return savedUpload;
   }
 
-  // async update(upload: Upload, file: Express.Multer.File) {
-  //   await this.delete(upload);
-  //   const fileType = `${file.mimetype.split('/')[1]}`;
-  //   const generatedKsuid = ksuid.randomSync().toJSON();
-  //   const fileName = `data/uploads/${generatedKsuid}.${fileType}`;
-  //   const newUpload = this.uploadRepository.create({
-  //     ksuid: generatedKsuid,
-  //     fileName,
-  //     fileType,
-  //   });
-  //   const savedUpload = await this.uploadRepository.save(newUpload);
-  //   await writeFile(fileName, Buffer.from(file.buffer));
-  //   return savedUpload; // TODO : Check where the functions is returned, if await is used and remove it;
-  // }
+  async findAll() {
+    return this.uploadRepository.find();
+  }
+
+  async findOne(ksuid: string) {
+    return this.uploadRepository.findOne({ where: { ksuid } });
+  }
 
   async delete(upload: Upload) {
-    await this.uploadRepository.softRemove(upload);
+    await this.uploadRepository.softDelete(upload.id);
     await this.storageService.deleteFile(upload.fileName);
   }
 

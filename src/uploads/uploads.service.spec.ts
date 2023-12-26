@@ -4,14 +4,14 @@ import { StorageService } from '../utility/storage/storage.service';
 import { Upload } from './entities/upload.entity';
 
 import { NotFoundException } from '@nestjs/common';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { Readable } from 'stream';
+import { TestModule } from 'src/test/test.module';
 
 describe('UploadsService', () => {
   let service: UploadsService;
   let mockStorageService: Partial<StorageService>;
-  let mockUploadRepository;
-  let uploads: Upload[] = [];
+
   type Storage = { fileName: string; buffer: Buffer };
   let storage: Storage[] = [];
   const mockFile: Express.Multer.File = {
@@ -27,7 +27,6 @@ describe('UploadsService', () => {
     buffer: Buffer.from('abc'),
   };
   const resetStorage = () => {
-    uploads = [];
     storage = [];
   };
 
@@ -54,45 +53,12 @@ describe('UploadsService', () => {
         return Promise.resolve();
       }),
     };
-    mockUploadRepository = {
-      create: jest.fn((upload: Partial<Upload>) => {
-        const currentTime = new Date();
-        return {
-          ksuid: upload.ksuid,
-          fileName: upload.fileName,
-          fileType: upload.fileType,
-          createdAt: currentTime,
-          updatedAt: currentTime,
-          deletedAt: null,
-        } as Upload;
-      }),
-      save: jest.fn((upload: Upload) => {
-        upload.id = Math.floor(Math.random() * 999999999);
-        uploads.push(upload);
-        return Promise.resolve(upload);
-      }),
-      softRemove: jest.fn((removeUpload) => {
-        uploads.forEach((upload) => {
-          if (upload.ksuid === removeUpload.ksuid) {
-            upload.deletedAt = new Date();
-          }
-        });
-      }),
-      findOne: jest.fn((whereClause) => {
-        const upload = uploads.filter(
-          (upload) => upload.ksuid === whereClause.where.ksuid,
-        );
-        if (upload === undefined) {
-          return Promise.resolve(null);
-        }
-        return Promise.resolve(upload[0]);
-      }),
-    };
     const module: TestingModule = await Test.createTestingModule({
+      imports: [TestModule, TypeOrmModule.forFeature([Upload])],
       providers: [
         UploadsService,
         { provide: StorageService, useValue: mockStorageService },
-        { provide: getRepositoryToken(Upload), useValue: mockUploadRepository },
+        // { provide: getRepositoryToken(Upload), useValue: TestModule },
       ],
     }).compile();
 
@@ -107,7 +73,7 @@ describe('UploadsService', () => {
     const upload = await service.create(mockFile);
     expect(upload).toBeDefined();
     expect(upload.fileType).toEqual(mockFile.mimetype.split('/')[1]);
-    expect(uploads).toContain(upload);
+    expect(await service.findAll()).toContainEqual(upload);
     expect(storage).toContainEqual({
       fileName: upload.fileName,
       buffer: mockFile.buffer,
@@ -116,16 +82,14 @@ describe('UploadsService', () => {
   });
 
   it('should delete a file and mark record as deleted on delete', async () => {
-    const upload = { ...(await service.create(mockFile)) };
-
+    const upload = await service.create(mockFile);
     await service.delete(upload);
-    expect(uploads).not.toContain(upload);
     expect(storage).not.toContainEqual({
       fileName: upload.fileName,
       buffer: mockFile.buffer,
     });
-    expect(uploads[0].deletedAt).toBeTruthy();
-    resetStorage();
+    const deletedUpload = await service.findOne(upload.ksuid);
+    expect(deletedUpload).toBeFalsy();
   });
   it('should return a buffer on read', async () => {
     const upload = { ...(await service.create(mockFile)) };
