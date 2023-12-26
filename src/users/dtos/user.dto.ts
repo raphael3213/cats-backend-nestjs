@@ -2,7 +2,7 @@ import { Expose } from 'class-transformer';
 
 export class UserDto {
   @Expose()
-  id: number;
+  ksuid: string;
 
   @Expose()
   email: string;

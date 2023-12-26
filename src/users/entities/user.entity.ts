@@ -13,6 +13,9 @@ export class User {
   @Column()
   email: string;
 
+  @Column({ type: 'text', nullable: false, unique: true })
+  ksuid: string;
+
   @Column()
   password: string;
 
