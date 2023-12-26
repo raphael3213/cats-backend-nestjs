@@ -50,7 +50,7 @@ export class CatsController {
     return this.catsService.uploadPhoto(ksuid, image);
   }
 
-  @Delete('upload/:ksuid')
+  @Delete(':ksuid/remove-image')
   removePhoto(@Param('ksuid') ksuid: string) {
     return this.catsService.removePhoto(ksuid);
   }
