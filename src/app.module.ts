@@ -10,7 +10,6 @@ import { TestModule } from './test/test.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpLoggerInterceptor } from './interceptors/http-logger.interceptor';
-import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
 import { UsersService } from './users/users.service';
 import { User } from './users/entities/user.entity';
 
@@ -49,10 +48,6 @@ import { User } from './users/entities/user.entity';
     {
       provide: APP_INTERCEPTOR,
       useClass: HttpLoggerInterceptor,
-    },
-    {
-      provide: APP_INTERCEPTOR,
-      useClass: CurrentUserInterceptor,
     },
   ],
 })
