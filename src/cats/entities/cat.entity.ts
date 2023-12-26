@@ -22,7 +22,7 @@ export class Cat {
   name: string;
 
   @OneToOne(() => Upload)
-  @JoinColumn()
+  @JoinColumn({ name: 'upload' })
   upload: Upload;
 
   @CreateDateColumn({ name: 'created_at' })

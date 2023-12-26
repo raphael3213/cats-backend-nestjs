@@ -1,17 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CatsService } from './cats.service';
 import { Cat } from './entities/cat.entity';
-import { getRepositoryToken } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UploadsService } from 'src/uploads/uploads.service';
 import { Upload } from 'src/uploads/entities/upload.entity';
-import ksuid from 'ksuid';
 import { Readable } from 'typeorm/platform/PlatformTools';
+import { TestModule } from 'src/test/test.module';
+import { StorageService } from 'src/utility/storage/storage.service';
 
 describe('CatsService', () => {
   let service: CatsService;
-  let mockCatRepository: any;
-  let mockUploadService: Partial<UploadsService>;
-  let cats: Partial<Cat>[] = [];
+  let mockStorageService: Partial<StorageService>;
   const mockFile: Express.Multer.File = {
     fieldname: 'image',
     originalname: 'test.png',
@@ -24,67 +23,26 @@ describe('CatsService', () => {
     stream: new Readable(),
     buffer: Buffer.from('abc'),
   };
-  const resetStorage = () => {
-    cats = [];
-  };
+  const resetStorage = () => {};
 
   beforeEach(async () => {
-    mockCatRepository = {
-      create: jest.fn((cat: Partial<Cat>) => {
-        return {
-          ksuid: cat.ksuid,
-          name: cat.name,
-        } as Cat;
+    mockStorageService = {
+      writeFile: jest.fn((fileName: string, buffer: Buffer) => {
+        fileName;
+        buffer;
+        return Promise.resolve();
       }),
-      save: jest.fn((cat: Cat) => {
-        const currentTime = new Date();
-        cat.ksuid = ksuid.randomSync().toJSON();
-        cat.id = Math.floor(Math.random() * 999999999);
-        cat.createdAt = currentTime;
-        cat.updatedAt = currentTime;
-
-        cats.push(cat);
-        return Promise.resolve(cat);
+      deleteFile: jest.fn((fileName) => {
+        fileName;
+        return Promise.resolve();
       }),
-      find: jest.fn(() => Promise.resolve(cats)),
-      findOne: jest.fn((whereClause) => {
-        const upload = cats.filter(
-          (upload) => upload.ksuid === whereClause.where.ksuid,
-        );
-        if (upload === undefined) {
-          return Promise.resolve(null);
-        }
-        return Promise.resolve(upload[0]);
-      }),
-    };
-    mockUploadService = {
-      create: jest.fn((file: Express.Multer.File) => {
-        const fileType = `${file.mimetype.split('/')[1]}`;
-        const generatedKsuid = ksuid.randomSync().toJSON();
-        const fileName = `data/uploads/${generatedKsuid}.${fileType}`;
-        return Promise.resolve({
-          ksuid: generatedKsuid,
-          id: Math.floor(Math.random() * 999999999),
-          fileName: fileName,
-          fileType: fileType,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          deletedAt: null,
-        } as Upload);
-      }),
-      delete: jest.fn(() => Promise.resolve(null)),
     };
     const module: TestingModule = await Test.createTestingModule({
+      imports: [TestModule, TypeOrmModule.forFeature([Upload, Cat])],
       providers: [
         CatsService,
-        {
-          provide: getRepositoryToken(Cat),
-          useValue: mockCatRepository,
-        },
-        {
-          provide: UploadsService,
-          useValue: mockUploadService,
-        },
+        UploadsService,
+        { provide: StorageService, useValue: mockStorageService },
       ],
     }).compile();
 
@@ -97,7 +55,7 @@ describe('CatsService', () => {
   it('should create and return a cat record on create', async () => {
     const cat = await service.create({ name: 'testing-cat' });
     expect(cat).toBeDefined();
-    expect(cats).toContainEqual(cat);
+    expect(await service.findAll()).toContainEqual({ ...cat, upload: null });
     resetStorage();
   });
   it('should create an upload object and return a cat with the nested upload object record on uploadPhoto', async () => {
