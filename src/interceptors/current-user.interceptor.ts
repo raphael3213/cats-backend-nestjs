@@ -10,10 +10,7 @@ import { UsersService } from 'src/users/users.service';
 @Injectable()
 export class CurrentUserInterceptor implements NestInterceptor {
   constructor(private userService: UsersService) {}
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler<any>,
-  ): Observable<any> | Promise<Observable<any>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     const request = context.switchToHttp().getRequest();
     const { userId } = request.session || {};
     if (userId) {

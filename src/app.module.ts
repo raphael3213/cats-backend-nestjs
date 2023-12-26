@@ -8,6 +8,11 @@ import { UtilityModule } from './utility/utility.module';
 import { UsersModule } from './users/users.module';
 import { TestModule } from './test/test.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { HttpLoggerInterceptor } from './interceptors/http-logger.interceptor';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { UsersService } from './users/users.service';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -35,8 +40,20 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       isGlobal: true,
       ignoreEnvFile: true,
     }),
+    TypeOrmModule.forFeature([User]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    UsersService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: HttpLoggerInterceptor,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: CurrentUserInterceptor,
+    },
+  ],
 })
 export class AppModule {}
