@@ -50,13 +50,13 @@ $ npm install
 ```
 ENV variables : 
 
-| Variable Name | Value       |
-|---------------|-------------|
-| DB_HOST       | 0.0.0.0     |
-| DB_PORT       | 5432        |
-| DB_DATABASE   | postgres    |
-| DB_USERNAME   | postgres    |
-| DB_PASSWORD   | password    |
+| Variable Name | Description               |Value
+|---------------|---------------------------|----------------
+| DB_HOST       | Postgres Server ip        |localhost
+| DB_PORT       | Postgres Server port      |5432 
+| DB_DATABASE   | Postgres primary Database |postgres
+| DB_USERNAME   | Postgres User             |postgres
+| DB_PASSWORD   | Postgres Password         |password
 
 ## Test
 
