@@ -24,9 +24,9 @@
 
 ## Description
 
-This backend application is powered by [Nest](https://github.com/nestjs/nest) framework. It provides APIs that allows you to sign up as a user and create profiles for cats,  upload a picture for each of them and fetch the pictures as well.
+This backend application is powered by [Nest](https://github.com/nestjs/nest) framework. It provides APIs that allows you to sign up as a user and create profiles for cats, upload a picture for each of them and fetch the pictures as well.
 
-It uses Postgres for Structured Storage and Local File System for file storage. It uses SQLite for unit tests.
+It uses Postgres for Structured Storage and Local File System for file storage. It uses in-memory SQLite for unit tests.
 It is completely dockerized with persistent volumes for both Postgres and File Storage.
 
 The Postman API collection : (Highly recommended to run this in postman for ease of use.)
@@ -48,15 +48,16 @@ $ npm install
 ```bash
 #Run the provided launch.json, with the configured env variables.
 ```
-ENV variables : 
 
-| Variable Name | Description               |Value
-|---------------|---------------------------|----------------
-| DB_HOST       | Postgres Server ip        |localhost
-| DB_PORT       | Postgres Server port      |5432 
-| DB_DATABASE   | Postgres primary Database |postgres
-| DB_USERNAME   | Postgres User             |postgres
-| DB_PASSWORD   | Postgres Password         |password
+ENV variables :
+
+| Variable Name | Description               | Value     |
+| ------------- | ------------------------- | --------- |
+| DB_HOST       | Postgres Server ip        | localhost |
+| DB_PORT       | Postgres Server port      | 5432      |
+| DB_DATABASE   | Postgres primary Database | postgres  |
+| DB_USERNAME   | Postgres User             | postgres  |
+| DB_PASSWORD   | Postgres Password         | password  |
 
 ## Test
 
@@ -72,12 +73,12 @@ $ npm run test:cov
 
 ```bash
 #Start the containers
-$ docker compose up
+$ docker compose up --build
 
 # Close the containers
 $ docker compose down
 
-#Delete the named volumes
+# Delete the named volumes
 $ docker compose down --volumes
 ```
 
