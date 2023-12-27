@@ -48,6 +48,15 @@ $ npm install
 ```bash
 #Run the provided launch.json, with the configured env variables.
 ```
+ENV variables : 
+
+| Variable Name | Value       |
+|---------------|-------------|
+| DB_HOST       | 0.0.0.0     |
+| DB_PORT       | 5432        |
+| DB_DATABASE   | postgres    |
+| DB_USERNAME   | postgres    |
+| DB_PASSWORD   | password    |
 
 ## Test
 
