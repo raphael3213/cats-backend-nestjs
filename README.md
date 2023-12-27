@@ -24,49 +24,53 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This backend application is powered by [Nest](https://github.com/nestjs/nest) framework. It provides APIs that allows you to sign up as a user and create profiles for cats,  upload a picture for each of them and fetch the pictures as well.
+
+It uses Postgres for Structured Storage and Local File System for file storage. It uses SQLite for unit tests.
+It is completely dockerized with persistent volumes for both Postgres and File Storage.
+
+The Postman API collection : (Highly recommended to run this in postman for ease of use.)
+
+https://documenter.getpostman.com/view/29224684/2s9Ykt5zDE
 
 ## Installation
 
 ```bash
+# Switch to appropriate node version
+$ nvm use
+
+# Install packages
 $ npm install
 ```
 
-## Running the app
+## Running the app in local
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+#Run the provided launch.json, with the configured env variables.
 ```
 
 ## Test
 
 ```bash
 # unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
+$ npm run test:watch
 
 # test coverage
 $ npm run test:cov
 ```
 
-## Support
+## Running the app in Docker
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+#Start the containers
+$ docker compose up
 
-## Stay in touch
+# Close the containers
+$ docker compose down
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+#Delete the named volumes
+$ docker compose down --volumes
+```
 
 ## License
 
