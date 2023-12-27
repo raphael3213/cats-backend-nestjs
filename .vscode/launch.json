@@ -20,6 +20,28 @@
         "DB_PASSWORD": "password"
       },
       "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Unit Tests",
+      "cwd": "${workspaceFolder}",
+      "runtimeVersion": "18.17.1",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test"],
+      "env": {},
+      "outputCapture": "std"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Coverage Tests",
+      "cwd": "${workspaceFolder}",
+      "runtimeVersion": "18.17.1",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "test:cov"],
+      "env": {},
+      "outputCapture": "std"
     }
   ]
 }
