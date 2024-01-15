@@ -18,6 +18,7 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+  app.enableCors({ origin: '*', methods: '*', credentials: true });
   await app.listen(3000);
 }
 bootstrap();

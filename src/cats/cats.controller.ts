@@ -19,11 +19,12 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateCatDto } from './dto/update-cat.dto';
 import { Serialize } from 'src/interceptors/serialize.interceptors';
 import { CatDto } from './dto/cat.dto';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('cats')
 @Serialize(CatDto)
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard('jwt'))
+// @UseGuards(AuthGuard)import { AuthGuard } from 'src/guards/auth.guard';
 export class CatsController {
   constructor(private readonly catsService: CatsService) {}
 

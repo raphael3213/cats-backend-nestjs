@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Cat } from './entities/cat.entity';
 import { UploadsModule } from 'src/uploads/uploads.module';
 import { Upload } from 'src/uploads/entities/upload.entity';
+import { JwtStrategy } from 'src/users/strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -14,6 +15,6 @@ import { Upload } from 'src/uploads/entities/upload.entity';
     UploadsModule,
   ],
   controllers: [CatsController],
-  providers: [CatsService],
+  providers: [CatsService, JwtStrategy],
 })
 export class CatsModule {}
